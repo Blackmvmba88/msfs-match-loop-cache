@@ -30,6 +30,24 @@ Esto no modifica el juego. Solo abre Chrome usando un directorio de cache en la 
 /Volumes/ADATA SC740/ChromeGameCache/cache
 ```
 
+## Microsoft Flight Simulator desde Chrome
+
+Si lo juegas desde Chrome por Xbox Cloud Gaming, la PC no descarga el simulador completo. El juego corre en servidores de Xbox y Chrome recibe video/controles. Por eso la cache local solo ayuda con la pagina web, cookies, sesion y algunos recursos del navegador; no puede guardar todos los "paquetes" internos del simulador.
+
+Para abrir Xbox Cloud Gaming con la cache en USB:
+
+```bash
+./scripts/launch_msfs_cloud.sh
+```
+
+Recomendaciones para que cargue mas estable:
+
+- Usa siempre el mismo perfil de Chrome.
+- No uses modo incognito.
+- No borres cookies ni datos del sitio de `xbox.com`.
+- Conecta la Mac por Ethernet o usa Wi-Fi 5 GHz cerca del modem.
+- Cierra pestañas, descargas y apps pesadas antes de abrir el simulador.
+
 ## Buscar archivos pesados
 
 ```bash
