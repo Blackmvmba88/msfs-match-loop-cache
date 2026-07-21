@@ -1,25 +1,29 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-USB_VOLUME="${USB_VOLUME:-/Volumes/ADATA SC740}"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=scripts/lib.sh
+source "$SCRIPT_DIR/lib.sh"
+
+USB_VOLUME="$(usb_volume)"
 CACHE_ROOT="${CACHE_ROOT:-$USB_VOLUME/ChromeGameCache}"
 CACHE_DIR="$CACHE_ROOT/cache"
+PROFILE_DIR="${PROFILE_DIR:-$CACHE_ROOT/profile}"
 DISK_CACHE_SIZE="${DISK_CACHE_SIZE:-2147483648}"
 MEDIA_CACHE_SIZE="${MEDIA_CACHE_SIZE:-1073741824}"
 GAME_URL="${1:-}"
 
-if [[ ! -d "$USB_VOLUME" ]]; then
-  echo "No encuentro la USB: $USB_VOLUME" >&2
-  echo "Conecta la USB o usa: USB_VOLUME='/Volumes/NOMBRE USB' $0" >&2
-  exit 1
-fi
+require_usb
 
-mkdir -p "$CACHE_DIR"
+mkdir -p "$CACHE_DIR" "$PROFILE_DIR"
 
 args=(
+  --user-data-dir="$PROFILE_DIR"
   --disk-cache-dir="$CACHE_DIR"
   --disk-cache-size="$DISK_CACHE_SIZE"
   --media-cache-size="$MEDIA_CACHE_SIZE"
+  --no-first-run
+  --disable-features=Translate
 )
 
 if [[ -n "$GAME_URL" ]]; then
@@ -27,4 +31,5 @@ if [[ -n "$GAME_URL" ]]; then
 fi
 
 echo "Abriendo Chrome con cache en: $CACHE_DIR"
+echo "Perfil dedicado en: $PROFILE_DIR"
 open -a "Google Chrome" --args "${args[@]}"

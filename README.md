@@ -12,6 +12,17 @@ Por defecto los scripts usan:
 
 Si conectas otra USB, cambia la variable `USB_VOLUME`.
 
+## Uso rapido
+
+Desde la USB:
+
+```bash
+cd "/Volumes/ADATA SC740/GameCacheCleanupRepo"
+./scripts/menu.sh
+```
+
+El menu permite abrir el simulador, correr diagnostico, buscar archivos pesados y limpiar metadata de macOS en la USB.
+
 ## Abrir Chrome con cache grande en la USB
 
 ```bash
@@ -29,6 +40,14 @@ Esto no modifica el juego. Solo abre Chrome usando un directorio de cache en la 
 ```text
 /Volumes/ADATA SC740/ChromeGameCache/cache
 ```
+
+Tambien usa un perfil dedicado de Chrome en la USB:
+
+```text
+/Volumes/ADATA SC740/ChromeGameCache/profile
+```
+
+Ese perfil ayuda a conservar sesion, cookies y cache de Xbox Cloud Gaming sin mezclarlo con tu Chrome normal.
 
 ## Microsoft Flight Simulator desde Chrome
 
@@ -82,10 +101,32 @@ El destino por defecto es:
 /Volumes/ADATA SC740/OffloadedFiles
 ```
 
+El script ahora revisa que haya espacio disponible y verifica la copia antes de permitir borrar el original con `--move`.
+
+## Diagnostico
+
+```bash
+./scripts/doctor.sh
+```
+
+Revisa si la USB esta montada, cuanto espacio queda, si Chrome existe, donde queda la cache y si el repo Git esta bien.
+
+## Limpiar metadata de la USB
+
+macOS puede crear archivos `._*` y `.DS_Store` en unidades externas. Para limpiarlos:
+
+```bash
+./scripts/clean_usb_metadata.sh
+```
+
+El script pide confirmacion antes de borrar.
+
 ## Flujo recomendado
 
-1. Corre `./scripts/scan_large_files.sh`.
-2. Revisa el reporte en `reports/`.
-3. Copia primero lo pesado con `./scripts/copy_to_usb.sh`.
-4. Abre y confirma que los archivos estan bien en la USB.
-5. Solo despues usa `--move` si quieres liberar espacio del disco interno.
+1. Corre `./scripts/doctor.sh`.
+2. Abre MSFS con `./scripts/launch_msfs_cloud.sh`.
+3. Corre `./scripts/scan_large_files.sh`.
+4. Revisa el reporte en `reports/`.
+5. Copia primero lo pesado con `./scripts/copy_to_usb.sh`.
+6. Abre y confirma que los archivos estan bien en la USB.
+7. Solo despues usa `--move` si quieres liberar espacio del disco interno.
