@@ -19,14 +19,16 @@ mkdir -p "$REPORT_DIR"
 
 {
   printf "size_bytes\tsize_human\tpath\n"
-  for dir in "${SEARCH_DIRS[@]}"; do
-    [[ -d "$dir" ]] || continue
-    find "$dir" -type f -size +"$MIN_SIZE" -print0 2>/dev/null
-  done | while IFS= read -r -d '' file; do
-    size_bytes="$(stat -f %z "$file")"
-    size_human="$(du -h "$file" | awk '{print $1}')"
-    printf "%s\t%s\t%s\n" "$size_bytes" "$size_human" "$file"
-  done | sort -nr
+  {
+    for dir in "${SEARCH_DIRS[@]}"; do
+      [[ -d "$dir" ]] || continue
+      find "$dir" -type f -size +"$MIN_SIZE" -print0 2>/dev/null
+    done | while IFS= read -r -d '' file; do
+      size_bytes="$(stat -f %z "$file")"
+      size_human="$(du -h "$file" | awk '{print $1}')"
+      printf "%s\t%s\t%s\n" "$size_bytes" "$size_human" "$file"
+    done
+  } | sort -nr || true
 } > "$REPORT_FILE"
 
 echo "Reporte creado: $REPORT_FILE"
