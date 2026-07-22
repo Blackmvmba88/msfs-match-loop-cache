@@ -23,6 +23,12 @@ cd "/Volumes/ADATA SC740/GameCacheCleanupRepo"
 
 El menu permite abrir el simulador, correr diagnostico, buscar archivos pesados y limpiar metadata de macOS en la USB.
 
+Tambien puedes crear atajos de doble clic en el Escritorio:
+
+```bash
+./scripts/create_desktop_shortcuts.sh
+```
+
 ## Abrir Chrome con cache grande en la USB
 
 ```bash
@@ -58,6 +64,20 @@ Para abrir Xbox Cloud Gaming con la cache en USB:
 ```bash
 ./scripts/launch_msfs_cloud.sh
 ```
+
+Para abrir el modo dedicado al stage que mas usas:
+
+```bash
+./scripts/launch_msfs_match_loop.sh
+```
+
+Este modo usa su propio espacio dentro de la USB:
+
+```text
+/Volumes/ADATA SC740/ChromeGameCache/match-loop
+```
+
+La idea es entrar siempre por ese launcher, cargar el stage "Match Loop" una vez y dejarlo 2-3 minutos. En cloud gaming no podemos guardar localmente los paquetes internos del stage, pero si mantenemos mas consistente el perfil, sesion, cache web y arranque de Xbox Cloud.
 
 Recomendaciones para que cargue mas estable:
 
