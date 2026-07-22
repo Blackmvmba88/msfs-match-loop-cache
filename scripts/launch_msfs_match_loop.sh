@@ -7,6 +7,7 @@ source "$SCRIPT_DIR/lib.sh"
 
 USB_VOLUME="$(usb_volume)"
 MATCH_ROOT="${MATCH_ROOT:-$USB_VOLUME/ChromeGameCache/match-loop}"
+MATCH_LOOP_URL="${MATCH_LOOP_URL:-https://www.xbox.com/play}"
 export CACHE_ROOT="$MATCH_ROOT"
 
 cat <<'EOF'
@@ -22,4 +23,4 @@ esto conserva lo que Chrome/Xbox si permiten guardar localmente.
 
 EOF
 
-"$SCRIPT_DIR/launch_chrome_game_cache.sh" "https://www.xbox.com/play"
+"$SCRIPT_DIR/launch_chrome_game_cache.sh" "$MATCH_LOOP_URL"

@@ -10,6 +10,7 @@ CACHE_ROOT="${CACHE_ROOT:-$USB_VOLUME/ChromeGameCache}"
 CACHE_DIR="$CACHE_ROOT/cache"
 PROFILE_DIR="${PROFILE_DIR:-$CACHE_ROOT/profile}"
 DEST_ROOT="${DEST_ROOT:-$USB_VOLUME/OffloadedFiles}"
+MATCH_ROOT="$USB_VOLUME/ChromeGameCache/match-loop"
 
 echo "Diagnostico del kit"
 echo
@@ -30,6 +31,7 @@ fi
 mkdir -p "$CACHE_DIR" "$PROFILE_DIR" "$DEST_ROOT"
 echo "Cache: $CACHE_DIR"
 echo "Perfil Chrome: $PROFILE_DIR"
+echo "Match Loop guardado: $(human_size "$(dir_size_bytes "$MATCH_ROOT")")"
 echo "Archivos pasados a USB: $DEST_ROOT"
 echo "Disco interno disponible: $(human_size "$(bytes_available "$HOME")")"
 

@@ -28,6 +28,10 @@ bytes_available() {
   df -k "$path" | awk 'NR == 2 {print $4 * 1024}'
 }
 
+now_iso() {
+  date -u +"%Y-%m-%dT%H:%M:%SZ"
+}
+
 path_size_bytes() {
   local path="$1"
   if [[ -f "$path" ]]; then
@@ -49,6 +53,33 @@ human_size() {
     }
     printf "%.1f%s", size, units[unit]
   }'
+}
+
+dir_size_bytes() {
+  local path="$1"
+  if [[ -e "$path" ]]; then
+    du -sk "$path" 2>/dev/null | awk '{print $1 * 1024}'
+  else
+    printf "0"
+  fi
+}
+
+file_count() {
+  local path="$1"
+  if [[ -d "$path" ]]; then
+    find "$path" -type f 2>/dev/null | wc -l | tr -d ' '
+  else
+    printf "0"
+  fi
+}
+
+metadata_count() {
+  local path="$1"
+  if [[ -d "$path" ]]; then
+    find "$path" \( -name '._*' -o -name '.DS_Store' \) -type f 2>/dev/null | wc -l | tr -d ' '
+  else
+    printf "0"
+  fi
 }
 
 ensure_space_for() {

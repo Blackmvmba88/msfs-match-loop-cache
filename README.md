@@ -21,7 +21,7 @@ cd "/Volumes/ADATA SC740/GameCacheCleanupRepo"
 ./scripts/menu.sh
 ```
 
-El menu permite abrir el simulador, correr diagnostico, buscar archivos pesados y limpiar metadata de macOS en la USB.
+El menu permite abrir el simulador, revisar el estado de cache, checar red, correr diagnostico, buscar archivos pesados y limpiar metadata de macOS en la USB.
 
 Tambien puedes crear atajos de doble clic en el Escritorio:
 
@@ -78,6 +78,40 @@ Este modo usa su propio espacio dentro de la USB:
 ```
 
 La idea es entrar siempre por ese launcher, cargar el stage "Match Loop" una vez y dejarlo 2-3 minutos. En cloud gaming no podemos guardar localmente los paquetes internos del stage, pero si mantenemos mas consistente el perfil, sesion, cache web y arranque de Xbox Cloud.
+
+El launcher tambien guarda el ultimo arranque en:
+
+```text
+/Volumes/ADATA SC740/ChromeGameCache/match-loop/.last-launch
+```
+
+Y usa ajustes de Chrome para reducir throttling mientras juegas.
+
+## Estado e historial de cache
+
+```bash
+./scripts/cache_status.sh
+```
+
+Mide cuanto se ha guardado para Match Loop, separa perfil/cache, cuenta archivos recientes y guarda historial en:
+
+```text
+/Volumes/ADATA SC740/ChromeGameCache/reports/cache-history.tsv
+```
+
+El ultimo reporte queda en:
+
+```text
+/Volumes/ADATA SC740/ChromeGameCache/reports/cache-status-latest.txt
+```
+
+## Chequeo de red Xbox
+
+```bash
+./scripts/network_check.sh
+```
+
+Mide DNS, conexion, TLS, primer byte y tiempo total hacia `https://www.xbox.com/play`. Sirve para saber si el problema viene de cache o de red.
 
 Recomendaciones para que cargue mas estable:
 
