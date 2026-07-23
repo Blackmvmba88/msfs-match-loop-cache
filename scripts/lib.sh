@@ -82,6 +82,11 @@ metadata_count() {
   fi
 }
 
+chrome_profile_in_use() {
+  local profile_dir="$1"
+  ps -axo comm=,args= | awk -v profile="--user-data-dir=$profile_dir" 'index($0, "Google Chrome") > 0 && index($0, profile) > 0 {found=1} END {exit found ? 0 : 1}'
+}
+
 ensure_space_for() {
   local source_path="$1"
   local destination_root="$2"

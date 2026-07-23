@@ -196,6 +196,14 @@ Para obtener el entorno más consistente:
 5. Cierra descargas, pestañas y aplicaciones pesadas antes de jugar.
 6. Usa Ethernet o Wi-Fi de 5 GHz cerca del router.
 
+Despues de jugar, cierra la ventana de Chrome de Match Loop y corre:
+
+```bash
+./scripts/post_play_optimize.sh
+```
+
+Esto guarda un snapshot, limpia metadata `._*` / `.DS_Store`, quita modelos temporales de Chrome que no ayudan a Xbox Cloud y deja mas espacio libre para que la siguiente sesion cachee mejor.
+
 ---
 
 ## 📊 Estado e historial de cache

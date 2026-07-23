@@ -36,7 +36,7 @@ args=(
   --no-first-run
   --disable-background-timer-throttling
   --disable-backgrounding-occluded-windows
-  --disable-features=CalculateNativeWinOcclusion,Translate
+  --disable-features=CalculateNativeWinOcclusion,OptimizationGuideModelDownloading,OptimizationHints,OptimizationTargetPrediction,Translate
   --disable-renderer-backgrounding
 )
 
