@@ -135,11 +135,5 @@ verify_copy() {
 
   [[ -d "$source_path" && -d "$destination" ]] || return 1
 
-  local source_files destination_files source_size destination_size
-  source_files="$(find "$source_path" -type f | wc -l | tr -d ' ')"
-  destination_files="$(find "$destination" -type f | wc -l | tr -d ' ')"
-  source_size="$(du -sk "$source_path" | awk '{print $1}')"
-  destination_size="$(du -sk "$destination" | awk '{print $1}')"
-
-  [[ "$source_files" == "$destination_files" && "$source_size" == "$destination_size" ]]
+  diff -qr -x '._*' -x '.DS_Store' "$source_path" "$destination" >/dev/null
 }

@@ -45,9 +45,9 @@ for source_path in "$@"; do
   echo "  destino: $destination"
   if [[ -d "$source_path" ]]; then
     mkdir -p "$destination"
-    rsync -aEh --progress "$source_path/" "$destination/"
+    rsync -aEh --progress --exclude '._*' --exclude '.DS_Store' "$source_path/" "$destination/"
   else
-    rsync -aEh --progress "$source_path" "$destination"
+    rsync -aEh --progress --exclude '._*' --exclude '.DS_Store' "$source_path" "$destination"
   fi
 
   if ! verify_copy "$source_path" "$destination"; then
