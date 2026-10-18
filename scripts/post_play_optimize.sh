@@ -35,13 +35,10 @@ echo "Guardando snapshot de estado..."
 echo "Limpiando metadata macOS del cache Match Loop..."
 find "$MATCH_ROOT" \( -name '._*' -o -name '.DS_Store' \) -type f -delete 2>/dev/null || true
 
-echo "Quitando modelos Chrome no necesarios para Xbox Cloud..."
+echo "Quitando modelos opcionales de Chrome; conservando caches de shaders..."
 rm -rf -- \
   "$PROFILE_DIR/OptGuideOnDeviceModel" \
   "$PROFILE_DIR/optimization_guide_model_store" \
-  "$PROFILE_DIR/GrShaderCache" \
-  "$PROFILE_DIR/ShaderCache" \
-  "$PROFILE_DIR/GraphiteDawnCache" \
   2>/dev/null || true
 
 echo "Recortando reportes viejos..."

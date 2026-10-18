@@ -202,7 +202,7 @@ Despues de jugar, cierra la ventana de Chrome de Match Loop y corre:
 ./scripts/post_play_optimize.sh
 ```
 
-Esto guarda un snapshot, limpia metadata `._*` / `.DS_Store`, quita modelos temporales de Chrome que no ayudan a Xbox Cloud y deja mas espacio libre para que la siguiente sesion cachee mejor.
+Esto guarda un snapshot, limpia metadata `._*` / `.DS_Store` y elimina los directorios de modelos opcionales indicados en el script. Conserva las caches de shaders de Chrome para evitar invalidarlas en cada limpieza. El espacio liberado no demuestra una mejora de velocidad; no se han medido tiempos de arranque.
 
 ---
 
@@ -448,3 +448,43 @@ One launch path.
 ## 📄 Licencia
 
 Agrega una licencia al repositorio antes de distribuir o aceptar contribuciones externas. Para un proyecto abierto y permisivo, MIT es una opción habitual.
+
+
+## Verificar cambios de arranque
+
+Este toolkit solo controla el navegador local. Separar en cada prueba:
+
+1. Tiempo desde ejecutar el launcher hasta que Xbox muestra su interfaz.
+2. Tiempo de espera de la cola del servicio.
+3. Tiempo desde iniciar el juego hasta su menú.
+4. Tiempo desde seleccionar el vuelo hasta poder controlarlo.
+
+Alternar al menos cinco sesiones de referencia y cinco con el cambio, usando
+el mismo equipo, red, perfil, versión de Chrome y escenario. Registrar los
+tiempos por separado, errores, mediana y rango. No borrar cookies ni caches
+entre sesiones para simular un arranque habitual. Las pruebas en frío deben
+registrarse aparte. El tamaño de cache y el TTFB HTTP de network_check.sh
+no miden el arranque del simulador, jitter, pérdida de paquetes ni latencia
+del stream.
+
+Comparar USB y SSD interno solo con perfiles de prueba y Chrome cerrado.
+No asumir que una USB o una cache mayor es más rápida. No copiar perfiles
+activos ni publicar cookies, tokens o datos del perfil en el repositorio.
+
+Una instalación local de MSFS requiere diagnóstico en el equipo donde corre
+el juego: almacenamiento, complementos, paquetes y tiempos por fase.
+Este proyecto no cambia esos ajustes ni expone SimConnect del servidor cloud.
+
+
+### Comportamiento del launcher
+
+El launcher solicita una instancia de Chrome con el perfil dedicado incluso
+cuando el navegador habitual ya está abierto. Registra la solicitud solo si
+macOS acepta la apertura; esto no confirma que la página o el juego estén listos.
+Conserva la gestión normal de procesos en segundo plano de Chrome para no
+forzar actividad de todas las pestañas ocultas. El diagnóstico HTTP falla con
+un error visible ante errores de conexión o HTTP y tiene límites de 10 segundos
+para conectar y 30 segundos para la operación completa.
+
+Estos cambios corrigen el comportamiento del launcher y acotan el diagnóstico.
+No constituyen una medición de mejora de FPS o tiempo de carga.
