@@ -474,3 +474,17 @@ activos ni publicar cookies, tokens o datos del perfil en el repositorio.
 Una instalación local de MSFS requiere diagnóstico en el equipo donde corre
 el juego: almacenamiento, complementos, paquetes y tiempos por fase.
 Este proyecto no cambia esos ajustes ni expone SimConnect del servidor cloud.
+
+
+### Comportamiento del launcher
+
+El launcher solicita una instancia de Chrome con el perfil dedicado incluso
+cuando el navegador habitual ya está abierto. Registra la solicitud solo si
+macOS acepta la apertura; esto no confirma que la página o el juego estén listos.
+Conserva la gestión normal de procesos en segundo plano de Chrome para no
+forzar actividad de todas las pestañas ocultas. El diagnóstico HTTP falla con
+un error visible ante errores de conexión o HTTP y tiene límites de 10 segundos
+para conectar y 30 segundos para la operación completa.
+
+Estos cambios corrigen el comportamiento del launcher y acotan el diagnóstico.
+No constituyen una medición de mejora de FPS o tiempo de carga.
