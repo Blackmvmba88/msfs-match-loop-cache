@@ -12,11 +12,11 @@ if ! command -v curl >/dev/null 2>&1; then
   exit 1
 fi
 
-curl -L -s -o /dev/null \
+curl --connect-timeout 10 --max-time 30 --fail -L -sS -o /dev/null \
   -w "DNS: %{time_namelookup}s\nConectar: %{time_connect}s\nTLS: %{time_appconnect}s\nPrimer byte: %{time_starttransfer}s\nTotal: %{time_total}s\nHTTP: %{http_code}\n" \
   "$TARGET_URL"
 
 echo
-echo "Guia rapida:"
-echo "- Total menor a 1.5s suele sentirse bien para abrir Xbox Cloud."
-echo "- Si primer byte/total sube mucho, cierra descargas, usa 5 GHz o Ethernet."
+echo "Alcance: estos tiempos corresponden a HTTP, no al stream ni a la carga del simulador."
+echo "Conectar, TLS y primer byte son tiempos acumulados desde el inicio."
+echo "Comparalos entre sesiones equivalentes; no hay un umbral que garantice una buena sesion."

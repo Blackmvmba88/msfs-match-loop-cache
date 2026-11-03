@@ -24,7 +24,7 @@ if (( available_bytes < MIN_USB_FREE_BYTES )); then
   echo "Aviso: queda poco espacio en la USB: $(human_size "$available_bytes")." >&2
 fi
 
-if [[ -e "$PROFILE_DIR/SingletonLock" ]]; then
+if [[ -e "$PROFILE_DIR/SingletonLock" || -L "$PROFILE_DIR/SingletonLock" ]]; then
   echo "Aviso: parece que este perfil ya esta abierto en Chrome. Si algo falla, cierra esa ventana y vuelve a intentar." >&2
 fi
 
@@ -34,10 +34,7 @@ args=(
   --disk-cache-size="$DISK_CACHE_SIZE"
   --media-cache-size="$MEDIA_CACHE_SIZE"
   --no-first-run
-  --disable-background-timer-throttling
-  --disable-backgrounding-occluded-windows
   --disable-features=CalculateNativeWinOcclusion,OptimizationGuideModelDownloading,OptimizationHints,OptimizationTargetPrediction,Translate
-  --disable-renderer-backgrounding
 )
 
 if [[ -n "$GAME_URL" ]]; then
@@ -46,6 +43,9 @@ fi
 
 echo "Abriendo Chrome con cache en: $CACHE_DIR"
 echo "Perfil dedicado en: $PROFILE_DIR"
+# A new app instance receives the dedicated profile arguments even when Chrome
+# is already running with the ordinary browsing profile.
+open -na "Google Chrome" --args "${args[@]}"
 {
   echo "timestamp=$(now_iso)"
   echo "cache_root=$CACHE_ROOT"
@@ -53,4 +53,3 @@ echo "Perfil dedicado en: $PROFILE_DIR"
   echo "cache_dir=$CACHE_DIR"
   echo "url=$GAME_URL"
 } > "$CACHE_ROOT/.last-launch"
-open -a "Google Chrome" --args "${args[@]}"
