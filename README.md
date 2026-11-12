@@ -452,6 +452,25 @@ Agrega una licencia al repositorio antes de distribuir o aceptar contribuciones 
 
 ## Verificar cambios de arranque
 
+Para medir el próximo arranque con el launcher corregido:
+
+```bash
+python3 scripts/measure_startup.py
+```
+
+Para una sesión de referencia con tu navegador habitual:
+
+```bash
+python3 scripts/measure_startup.py --reference
+```
+
+Pulsa Enter en Terminal al alcanzar cada etapa indicada. Cada marca se guarda
+en `reports/startup-<id>.json`, incluso si cancelas con Ctrl+C. Las marcas son
+manuales e incluyen tu tiempo de reacción. La sesión de referencia no abre
+Chrome: debes abrir Xbox tú después de iniciar el cronómetro. No ejecutes
+el launcher durante un vuelo activo; abre un perfil distinto y puede requerir
+iniciar sesión e instalar el observador en ese perfil.
+
 Este toolkit solo controla el navegador local. Separar en cada prueba:
 
 1. Tiempo desde ejecutar el launcher hasta que Xbox muestra su interfaz.
