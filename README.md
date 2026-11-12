@@ -452,6 +452,28 @@ Agrega una licencia al repositorio antes de distribuir o aceptar contribuciones 
 
 ## Verificar cambios de arranque
 
+### Inicio con respaldo
+
+`python3 scripts/launch_resilient.py` intenta usar la USB y recurre a un
+perfil independiente en el Mac si falta la unidad, no permite escribir o falla
+el comando de apertura. `--local` fuerza el respaldo y `--status` muestra el
+último registro sin abrir Chrome. No copia cookies ni perfiles activos.
+El perfil local puede requerir iniciar sesión e instalar el observador.
+
+Guarda los intentos en
+`~/Library/Application Support/BlackMambaFlightKit/last-launch.json`.
+Comprueba por separado la aceptación del comando y la presencia del proceso;
+no afirma que Xbox o el juego estén listos. Si no puede verificar el proceso,
+deja un resultado incierto y no abre otra sesión automáticamente. No cierres
+ni desconectes una USB con un perfil activo. La caída de una unidad durante
+una partida no permite trasladar esa partida automáticamente a otro perfil.
+
+En este Mac hay una copia independiente del launcher en
+`~/Applications/BlackMambaFlightKit/launch_resilient.py` y accesos en el
+Escritorio: **MSFS Inicio seguro**, **MSFS Respaldo Mac** y **MSFS Estado**.
+Mantienen Terminal abierta para que el resultado o error permanezca visible.
+No dependen de que esta carpeta de trabajo siga en su ubicación actual.
+
 Para medir el próximo arranque con el launcher corregido:
 
 ```bash
