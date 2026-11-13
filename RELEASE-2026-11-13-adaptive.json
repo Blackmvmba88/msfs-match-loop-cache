@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-13",
+  "change": "Evitar duplicación de sesiones y conservar el navegador activo",
+  "tests": "15 pruebas unittest correctas",
+  "backup": "/Users/blackmamba/Applications/BlackMambaFlightKit/recovery/20261113-021811",
+  "sha256": "54f801d93226b3eec2e00987f7f7548383fab0c51f81076e4a00a91154abbad2",
+  "browserSettings": {
+    "scope": "Perfil de Chrome que contiene la transmisión observada; no se asume que sea el perfil de ADATA",
+    "memorySaver": "balanced",
+    "alwaysActive": "play.xbox.com",
+    "preloadPages": false
+  },
+  "observed": {
+    "videoDecode": "Hardware accelerated",
+    "gpuCrashes": 0,
+    "xbox": "Transmisión con audio activo"
+  },
+  "limits": "Sin medición comparativa de FPS o latencia de la transmisión. Detección del launcher a nivel de proceso, no de pestaña.",
+  "launcherVerification": "Ejecutado --game --smart: existing-profile-active, salida 0, sin abrir pestaña ni ventana adicional"
+}

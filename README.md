@@ -548,3 +548,20 @@ internos y 5 GiB en USB son márgenes operativos del kit, no requisitos de Xbox.
 Accesos instalados en este Mac: **MSFS Jugar inteligente** y **MSFS Diagnóstico**.
 Conservan el perfil existente; no cierran otras apps ni cambian ajustes de red.
 El diagnóstico shell deja de crear carpetas en una USB ausente.
+
+### Conservar la sesión existente
+
+El launcher inspecciona Chrome antes de abrir: si su perfil ya está activo,
+no crea otra pestaña; si detecta el navegador habitual, pide revisar esa sesión
+sin abrir otro perfil. No identifica pestañas ni traslada partidas entre perfiles.
+Solo `--new-session` permite abrir un perfil adicional cuando otro navegador
+está activo. Si la inspección no está disponible o el arranque queda incierto,
+se detiene sin intentar otro perfil. Un bloqueo local evita arranques simultáneos.
+
+En la sesión observada se activó Ahorro de memoria equilibrado, se agregó
+`play.xbox.com` a sitios siempre activos y se apagó Precargar páginas.
+Estos ajustes pertenecen al perfil de Chrome utilizado y no se propagan a
+otros perfiles automáticamente. Para revertir: Configuración > Rendimiento,
+apagar Ahorro de memoria, eliminar la excepción y encender Precargar páginas.
+Fuente: https://support.google.com/chrome/answer/12929150?hl=en
+La aceleración de vídeo ya estaba activa; no se cambiaron flags de GPU.
