@@ -4,7 +4,7 @@
   "recovery": "~/Applications/BlackMambaFlightKit/recovery/20261113-011617",
   "installed": "~/Applications/BlackMambaFlightKit",
   "sha256": {
-    "launch_resilient.py": "331b8f00d7895b3247a9bc7c5df56972ef92f4a4b5ea2fc29d4e477854bb220d",
+    "launch_resilient.py": "e70a087cd9be58abd41c44d43418a0ff74d8fea6426732258b68ce906ea2c187",
     "play_check.py": "2febf3f5038c55fcc9702366f23109e8322096c20832eacc39672af47a17e615"
   },
   "measurement": {

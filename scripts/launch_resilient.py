@@ -29,7 +29,7 @@ def launch(root, url=URL):
     profile.mkdir(parents=True, exist_ok=True)
     cache.mkdir(parents=True, exist_ok=True)
     subprocess.run(['open', '-na', 'Google Chrome', '--args',
-                    f'--user-data-dir={profile}', f'--disk-cache-dir={cache}',
+                    f'--user-data-dir={profile}', '--profile-directory=Default', f'--disk-cache-dir={cache}',
                     '--disk-cache-size=2147483648', '--no-first-run', url], check=True, timeout=20)
     # Acceptance by LaunchServices is separate from observing a live process.
     for _ in range(10):
