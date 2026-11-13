@@ -4,12 +4,14 @@ import argparse
 from datetime import datetime, timezone
 import json
 import os
+import shutil
 from pathlib import Path
 import subprocess
 import tempfile
 import time
 
 URL = 'https://www.xbox.com/play'
+GAME_URL = 'https://www.xbox.com/es-MX/play/launch/microsoft-flight-simulator-2024/9P38D19T7LRV'
 
 
 def writable(root):
@@ -22,13 +24,13 @@ def writable(root):
         return False
 
 
-def launch(root):
+def launch(root, url=URL):
     profile, cache = root / 'profile', root / 'cache'
     profile.mkdir(parents=True, exist_ok=True)
     cache.mkdir(parents=True, exist_ok=True)
     subprocess.run(['open', '-na', 'Google Chrome', '--args',
                     f'--user-data-dir={profile}', f'--disk-cache-dir={cache}',
-                    '--no-first-run', URL], check=True, timeout=20)
+                    '--disk-cache-size=2147483648', '--no-first-run', url], check=True, timeout=20)
     # Acceptance by LaunchServices is separate from observing a live process.
     for _ in range(10):
         result = subprocess.run(['ps', '-axo', 'args='], capture_output=True,
@@ -47,6 +49,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--local', action='store_true', help='Usar directamente el respaldo del Mac')
     parser.add_argument('--status', action='store_true', help='Mostrar el último resultado sin abrir Chrome')
+    parser.add_argument('--game', action='store_true', help='Abrir directamente Flight Simulator 2024')
+    parser.add_argument('--smart', action='store_true', help='Evaluar el equipo y guardar recomendaciones antes del arranque')
     args = parser.parse_args()
     local = Path.home() / 'Library/Application Support/BlackMambaFlightKit'
     local.mkdir(parents=True, exist_ok=True)
@@ -54,6 +58,12 @@ def main():
     if args.status:
         print(status.read_text() if status.exists() else 'Todavía no hay un arranque registrado.')
         return 0
+    try:
+        free = shutil.disk_usage(Path.home()).free / (1024 ** 3)
+        if free < 15:
+            print(f'Aviso: el Mac tiene {free:.1f} GiB libres. Revisa espacio antes de jugar (objetivo práctico: 15 GiB).', flush=True)
+    except OSError:
+        pass
     usb = Path(os.environ.get('USB_VOLUME', '/Volumes/ADATA SC740'))
     usb_root = usb / 'ChromeGameCache'
     candidates = []
@@ -62,6 +72,12 @@ def main():
     candidates.append(('Mac', local / 'browser'))
     report = {'startedAt': datetime.now(timezone.utc).isoformat(),
               'attempts': [], 'pageVerified': False, 'gameVerified': False}
+    if args.smart:
+        from play_check import collect
+        report['preflight'] = collect()
+        print('Chequeo inteligente local · reglas basadas en el estado del equipo', flush=True)
+        for tip in report['preflight']['recommendations']:
+            print('•', tip, flush=True)
 
     def save():
         temporary = status.with_suffix('.tmp')
@@ -75,7 +91,7 @@ def main():
         save()
         print(f'Abriendo Xbox · {mode}', flush=True)
         try:
-            attempt['state'] = launch(root)
+            attempt['state'] = launch(root, GAME_URL) if args.game else launch(root)
         except (OSError, subprocess.SubprocessError) as exc:
             attempt['state'] = 'failed'
             attempt['error'] = str(exc)

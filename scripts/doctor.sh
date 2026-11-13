@@ -28,7 +28,7 @@ else
   echo "Chrome: no encontrado en /Applications/Google Chrome.app"
 fi
 
-mkdir -p "$CACHE_DIR" "$PROFILE_DIR" "$DEST_ROOT"
+# El diagnóstico no crea carpetas ni escribe en /Volumes si falta la unidad.
 echo "Cache: $CACHE_DIR"
 echo "Perfil Chrome: $PROFILE_DIR"
 echo "Match Loop guardado: $(human_size "$(dir_size_bytes "$MATCH_ROOT")")"

@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-13",
+  "checks": "9 pruebas unittest correctas; launcher instalado observado con perfil ADATA; página y juego pendientes de verificación visual",
+  "recovery": "~/Applications/BlackMambaFlightKit/recovery/20261113-011617",
+  "installed": "~/Applications/BlackMambaFlightKit",
+  "sha256": {
+    "launch_resilient.py": "331b8f00d7895b3247a9bc7c5df56972ef92f4a4b5ea2fc29d4e477854bb220d",
+    "play_check.py": "2febf3f5038c55fcc9702366f23109e8322096c20832eacc39672af47a17e615"
+  },
+  "measurement": {
+    "routerSamples": 8,
+    "lossPercent": 0,
+    "averageMs": 0.69,
+    "internalFreeGiB": 2.32,
+    "usbFreeGiB": 51.56
+  },
+  "limits": "Sin medición de FPS o latencia al servidor Xbox; sin limpieza automática."
+}

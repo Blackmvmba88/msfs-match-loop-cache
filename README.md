@@ -529,3 +529,22 @@ para conectar y 30 segundos para la operación completa.
 
 Estos cambios corrigen el comportamiento del launcher y acotan el diagnóstico.
 No constituyen una medición de mejora de FPS o tiempo de carga.
+
+## Inicio inteligente local
+
+`python3 scripts/launch_resilient.py --game --smart` abre directamente MSFS
+2024 usando primero el perfil de ADATA SC740 y conserva el respaldo local.
+El chequeo usa reglas locales para advertir sobre espacio, alimentación y
+presencia de la unidad. No usa un modelo remoto ni controla el avión.
+El launcher limita la caché de disco solicitada a Chrome a 2 GiB; no limita
+el tamaño total del perfil ni borra la caché existente.
+
+`python3 scripts/play_check.py --network --save` mide ocho pings al router y
+guarda un informe local en `~/Library/Application Support/BlackMambaFlightKit/checks`.
+Distingue mediciones ausentes de resultados válidos. ICMP al router no mide
+el servidor Xbox, FPS, bitrate ni latencia de entrada. Los objetivos de 15 GiB
+internos y 5 GiB en USB son márgenes operativos del kit, no requisitos de Xbox.
+
+Accesos instalados en este Mac: **MSFS Jugar inteligente** y **MSFS Diagnóstico**.
+Conservan el perfil existente; no cierran otras apps ni cambian ajustes de red.
+El diagnóstico shell deja de crear carpetas en una USB ausente.
