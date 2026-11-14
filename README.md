@@ -586,3 +586,15 @@ los ejecutables, y se conserva entre actualizaciones y reinicios. Para
 cambiarla, establecer `"smart": false`; `--smart` permite activarla para un
 arranque. Una configuración dañada se conserva y usa el chequeo por defecto.
 Los accesos del Escritorio apuntan a la instalación estable del Mac.
+
+### Activar y desactivar asistencia
+
+`--assistance on`, `--assistance off` y `--assistance status` guardan o
+consultan el estado sin abrir Chrome. En este Mac están disponibles los
+accesos **MSFS Activar asistencia**, **MSFS Desactivar asistencia** y
+**MSFS Estado asistencia**. El acceso de juego respeta la preferencia guardada.
+Desactivar omite el plan previo automático; conserva las protecciones del
+launcher, el perfil y el historial. `--plan` y `--smart` solicitan evaluación
+explícita aunque esté desactivada. Esta asistencia prepara el equipo y ofrece
+recomendaciones; no controla el avión. Flight Observer es una herramienta
+independiente de observación de solo lectura.

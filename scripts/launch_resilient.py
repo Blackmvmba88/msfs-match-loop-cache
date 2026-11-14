@@ -109,6 +109,7 @@ def main():
     parser.add_argument('--smart', action='store_true', help='Evaluar el equipo y guardar recomendaciones antes del arranque')
     parser.add_argument('--new-session', action='store_true', help='Permitir otro perfil aunque el navegador habitual esté abierto')
     parser.add_argument('--plan', action='store_true', help='Evaluar y mostrar el plan sin abrir Chrome')
+    parser.add_argument('--assistance', choices=('on', 'off', 'status'), help='Activar, desactivar o consultar la preparación inteligente persistente')
     args = parser.parse_args()
     local = Path.home() / 'Library/Application Support/BlackMambaFlightKit'
     local.mkdir(parents=True, exist_ok=True)
@@ -117,6 +118,20 @@ def main():
         print(status.read_text() if status.exists() else 'Todavía no hay un arranque registrado.')
         return 0
     settings = load_settings(local)
+    if args.assistance:
+        if args.assistance != 'status':
+            settings['smart'] = args.assistance == 'on'
+            path = local / 'settings.json'
+            if path.exists():
+                backup = local / ('settings-backup-' + uuid.uuid4().hex + '.json')
+                shutil.copy2(path, backup)
+            staging = path.with_suffix('.tmp')
+            staging.write_text(json.dumps(settings, indent=2) + '\n')
+            staging.replace(path)
+        print('Asistencia de preparación:', 'ACTIVADA' if settings['smart'] else 'DESACTIVADA')
+        print('Funciones: diagnóstico previo, recomendaciones y plan de arranque.')
+        print('Control del avión: no conectado por este kit.')
+        return 0
     try:
         free = shutil.disk_usage(Path.home()).free / (1024 ** 3)
         if free < 15:
