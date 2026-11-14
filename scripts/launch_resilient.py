@@ -10,6 +10,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 import time
+import uuid
 
 URL = 'https://www.xbox.com/play'
 GAME_URL = 'https://www.xbox.com/es-MX/play/launch/microsoft-flight-simulator-2024/9P38D19T7LRV'
@@ -89,6 +90,7 @@ def main():
     parser.add_argument('--game', action='store_true', help='Abrir directamente Flight Simulator 2024')
     parser.add_argument('--smart', action='store_true', help='Evaluar el equipo y guardar recomendaciones antes del arranque')
     parser.add_argument('--new-session', action='store_true', help='Permitir otro perfil aunque el navegador habitual esté abierto')
+    parser.add_argument('--plan', action='store_true', help='Evaluar y mostrar el plan sin abrir Chrome')
     args = parser.parse_args()
     local = Path.home() / 'Library/Application Support/BlackMambaFlightKit'
     local.mkdir(parents=True, exist_ok=True)
@@ -110,9 +112,12 @@ def main():
     candidates.append(('Mac', local / 'browser'))
     report = {'startedAt': datetime.now(timezone.utc).isoformat(),
               'attempts': [], 'pageVerified': False, 'gameVerified': False}
-    if args.smart:
-        from play_check import collect
+    report['sessionId'] = uuid.uuid4().hex
+    report['schemaVersion'] = 2
+    if args.smart or args.plan:
+        from play_check import collect, build_plan
         report['preflight'] = collect()
+        report['plan'] = build_plan(report['preflight'])
         print('Chequeo inteligente local · reglas basadas en el estado del equipo', flush=True)
         for tip in report['preflight']['recommendations']:
             print('•', tip, flush=True)
@@ -121,8 +126,20 @@ def main():
         temporary = status.with_suffix('.tmp')
         temporary.write_text(json.dumps(report, indent=2, ensure_ascii=False) + '\n')
         temporary.replace(status)
+        history = local / 'sessions'
+        history.mkdir(exist_ok=True)
+        record = history / (report['sessionId'] + '.json')
+        staging = record.with_suffix('.tmp')
+        staging.write_text(json.dumps(report, indent=2, ensure_ascii=False) + '\n')
+        staging.replace(record)
 
     save()
+    if 'plan' in report:
+        print('Preparación:', report['plan']['readiness'])
+        for issue in report['plan']['issues']:
+            print(f"[{issue['priority']}] {issue['action']}")
+        if args.plan or report['plan']['readiness'] == 'blocked':
+            return 2 if report['plan']['readiness'] == 'blocked' else 0
     for mode, root in candidates:
         attempt = {'mode': mode, 'profile': str(root / 'profile'), 'state': 'starting'}
         report['attempts'].append(attempt)

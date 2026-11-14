@@ -76,6 +76,38 @@ def collect(network=False):
     return report
 
 
+def build_plan(report):
+    """Reglas explicables; nunca confundir preparación con calidad del stream."""
+    issues = []
+    def add(priority, code, action):
+        issues.append({'priority': priority, 'code': code, 'action': action})
+    if not report['chromeInstalled']:
+        add('block', 'chrome-missing', 'Instala Google Chrome antes de iniciar.')
+    free = report.get('internalFreeGiB')
+    if free is None:
+        add('review', 'disk-unknown', 'No se pudo medir el espacio interno.')
+    elif free < 2:
+        add('block', 'disk-critical', 'Libera espacio interno; el kit requiere un margen operativo de 2 GiB para arrancar.')
+    elif free < 15:
+        add('review', 'disk-low', 'Revisa espacio interno; objetivo operativo: 15 GiB.')
+    if not report['usbConnected']:
+        add('review', 'local-profile', 'Se usará el perfil del Mac; puede pedir iniciar sesión.')
+    elif report.get('usbFreeGiB') is None:
+        add('review', 'usb-space-unknown', 'No se pudo medir el espacio de ADATA.')
+    elif report['usbFreeGiB'] < 5:
+        add('review', 'usb-low', 'Revisa espacio de ADATA antes de una sesión larga.')
+    if report.get('power') == 'battery':
+        add('review', 'battery', 'Conecta el cargador.')
+    probe = report.get('routerProbe', {})
+    if probe.get('state') != 'measured':
+        add('info', 'network-unmeasured', 'Red sin medir; usa MSFS Diagnóstico para comprobar el router.')
+    elif (probe.get('lossPercent') or 0) > 0 or (probe.get('averageMs') or 0) > 20:
+        add('review', 'router-review', 'Compara con Ethernet; esta muestra ICMP no mide el stream de Xbox.')
+    return {'readiness': 'blocked' if any(x['priority'] == 'block' for x in issues)
+            else 'review' if any(x['priority'] == 'review' for x in issues) else 'ready',
+            'issues': issues, 'streamQuality': 'unmeasured'}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--network', action='store_true', help='Medir ocho pings al router, sin prueba de velocidad')

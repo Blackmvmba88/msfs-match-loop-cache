@@ -565,3 +565,14 @@ otros perfiles automáticamente. Para revertir: Configuración > Rendimiento,
 apagar Ahorro de memoria, eliminar la excepción y encender Precargar páginas.
 Fuente: https://support.google.com/chrome/answer/12929150?hl=en
 La aceleración de vídeo ya estaba activa; no se cambiaron flags de GPU.
+
+### Plan operativo e historial
+
+`python3 scripts/launch_resilient.py --plan` evalúa el equipo sin abrir Chrome.
+El modo `--smart` aplica el mismo plan antes de arrancar: bloquea si falta
+Chrome o quedan menos de 2 GiB internos (margen del kit), y señala condiciones
+que requieren revisión. No cambia ajustes ni libera espacio automáticamente.
+Cada invocación conserva su registro JSON en el directorio local `sessions`,
+con identificador único, plan y estados de los intentos. No registra cookies.
+`ready` describe preparación local; la calidad del stream sigue sin medir.
+El historial se conserva para diagnóstico; no se borra automáticamente.
