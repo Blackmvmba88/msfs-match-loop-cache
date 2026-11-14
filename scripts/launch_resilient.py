@@ -83,6 +83,24 @@ def launch(root, url=URL, new_session=False):
     return 'requested-process-not-observed'
 
 
+def load_settings(local):
+    path = local / 'settings.json'
+    defaults = {'schemaVersion': 1, 'smart': True}
+    if not path.exists():
+        staging = path.with_suffix('.tmp')
+        staging.write_text(json.dumps(defaults, indent=2) + '\n')
+        staging.replace(path)
+        return defaults
+    try:
+        settings = json.loads(path.read_text())
+        if not isinstance(settings, dict) or type(settings.get('smart')) is not bool:
+            raise ValueError('smart debe ser booleano')
+        return {**defaults, **settings}
+    except (ValueError, OSError) as exc:
+        print(f'Configuración no válida: {exc}. Se conserva el archivo y se activa el chequeo inteligente.')
+        return defaults
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--local', action='store_true', help='Usar directamente el respaldo del Mac')
@@ -98,6 +116,7 @@ def main():
     if args.status:
         print(status.read_text() if status.exists() else 'Todavía no hay un arranque registrado.')
         return 0
+    settings = load_settings(local)
     try:
         free = shutil.disk_usage(Path.home()).free / (1024 ** 3)
         if free < 15:
@@ -114,7 +133,7 @@ def main():
               'attempts': [], 'pageVerified': False, 'gameVerified': False}
     report['sessionId'] = uuid.uuid4().hex
     report['schemaVersion'] = 2
-    if args.smart or args.plan:
+    if args.smart or args.plan or settings['smart']:
         from play_check import collect, build_plan
         report['preflight'] = collect()
         report['plan'] = build_plan(report['preflight'])

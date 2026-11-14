@@ -576,3 +576,13 @@ Cada invocación conserva su registro JSON en el directorio local `sessions`,
 con identificador único, plan y estados de los intentos. No registra cookies.
 `ready` describe preparación local; la calidad del stream sigue sin medir.
 El historial se conserva para diagnóstico; no se borra automáticamente.
+
+### Persistencia del modo inteligente
+
+Todos los arranques del launcher activan el chequeo inteligente por defecto,
+incluso sin `--smart`. La preferencia se crea una sola vez en
+`~/Library/Application Support/BlackMambaFlightKit/settings.json`, fuera de
+los ejecutables, y se conserva entre actualizaciones y reinicios. Para
+cambiarla, establecer `"smart": false`; `--smart` permite activarla para un
+arranque. Una configuración dañada se conserva y usa el chequeo por defecto.
+Los accesos del Escritorio apuntan a la instalación estable del Mac.
